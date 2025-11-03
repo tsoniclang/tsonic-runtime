@@ -36,6 +36,9 @@ ScaffoldingReadMe.txt
 # NuGet Symbol Packages
 *.snupkg
 
+# Node.js
+node_modules/
+
 # Others
 ~$*
 *~
@@ -51,5 +54,12 @@ CodeCoverage/
 # NUnit
 *.VisualState.xml
 TestResult.xml
-nunit-*.xml.vscode/
+nunit-*.xml
+
+# VS Code
 .vscode/
+
+# Claude Code working directories
+.tests/
+.analysis/
+.todos/
