@@ -4,7 +4,7 @@
 
 using System;
 using System.Globalization;
-using System.Web;
+using System.Text;
 
 namespace Tsonic.Runtime
 {
@@ -83,11 +83,69 @@ namespace Tsonic.Runtime
         }
 
         /// <summary>
-        /// Encode URI component
+        /// Helper method to percent-encode a rune (Unicode scalar value)
+        /// </summary>
+        private static void AppendPercentEncoded(StringBuilder sb, Rune rune)
+        {
+            Span<byte> utf8Bytes = stackalloc byte[4];
+            var bytesWritten = rune.EncodeToUtf8(utf8Bytes);
+            for (var i = 0; i < bytesWritten; i++)
+            {
+                sb.Append('%');
+                sb.Append(utf8Bytes[i].ToString("X2"));
+            }
+        }
+
+        /// <summary>
+        /// Check if character should NOT be encoded by encodeURI
+        /// Per spec: A-Z a-z 0-9 ; , / ? : @ & = + $ - _ . ! ~ * ' ( ) #
+        /// </summary>
+        private static bool IsUriUnescaped(Rune rune)
+        {
+            var value = rune.Value;
+            return (value >= 'A' && value <= 'Z') ||
+                   (value >= 'a' && value <= 'z') ||
+                   (value >= '0' && value <= '9') ||
+                   value == ';' || value == ',' || value == '/' || value == '?' ||
+                   value == ':' || value == '@' || value == '&' || value == '=' ||
+                   value == '+' || value == '$' || value == '-' || value == '_' ||
+                   value == '.' || value == '!' || value == '~' || value == '*' ||
+                   value == '\'' || value == '(' || value == ')' || value == '#';
+        }
+
+        /// <summary>
+        /// Check if character should NOT be encoded by encodeURIComponent
+        /// Per spec: A-Z a-z 0-9 - _ . ! ~ * ' ( )
+        /// </summary>
+        private static bool IsComponentUnescaped(Rune rune)
+        {
+            var value = rune.Value;
+            return (value >= 'A' && value <= 'Z') ||
+                   (value >= 'a' && value <= 'z') ||
+                   (value >= '0' && value <= '9') ||
+                   value == '-' || value == '_' || value == '.' ||
+                   value == '!' || value == '~' || value == '*' ||
+                   value == '\'' || value == '(' || value == ')';
+        }
+
+        /// <summary>
+        /// Encode URI component (encodes all except: A-Z a-z 0-9 - _ . ! ~ * ' ( ))
         /// </summary>
         public static string encodeURIComponent(string component)
         {
-            return HttpUtility.UrlEncode(component);
+            var sb = new StringBuilder(component.Length);
+            foreach (var rune in component.EnumerateRunes())
+            {
+                if (IsComponentUnescaped(rune))
+                {
+                    sb.Append(rune);
+                }
+                else
+                {
+                    AppendPercentEncoded(sb, rune);
+                }
+            }
+            return sb.ToString();
         }
 
         /// <summary>
@@ -95,15 +153,27 @@ namespace Tsonic.Runtime
         /// </summary>
         public static string decodeURIComponent(string component)
         {
-            return HttpUtility.UrlDecode(component);
+            return Uri.UnescapeDataString(component);
         }
 
         /// <summary>
-        /// Encode URI
+        /// Encode URI (preserves URI reserved characters: ; , / ? : @ & = + $ #)
         /// </summary>
         public static string encodeURI(string uri)
         {
-            return Uri.EscapeUriString(uri);
+            var sb = new StringBuilder(uri.Length);
+            foreach (var rune in uri.EnumerateRunes())
+            {
+                if (IsUriUnescaped(rune))
+                {
+                    sb.Append(rune);
+                }
+                else
+                {
+                    AppendPercentEncoded(sb, rune);
+                }
+            }
+            return sb.ToString();
         }
 
         /// <summary>

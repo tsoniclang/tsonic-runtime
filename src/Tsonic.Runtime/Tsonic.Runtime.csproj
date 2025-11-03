@@ -15,12 +15,9 @@
     <IsAotCompatible>true</IsAotCompatible>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
 
-    <!-- Suppress expected warnings for JS runtime implementation -->
-    <!-- CS8981: lowercase type names (e.g., 'console' matches JS) -->
-    <!-- SYSLIB0013: Uri.EscapeUriString (needed for JS compatibility) -->
-    <!-- IL2026/IL3050: JSON serializer (dynamic typing required for JS semantics) -->
-    <!-- IL2071/IL2075/IL2090: Reflection (required for structural typing) -->
-    <NoWarn>$(NoWarn);CS8981;SYSLIB0013;IL2026;IL3050;IL2071;IL2075;IL2090</NoWarn>
+    <!-- Suppress only intentional design choices -->
+    <!-- CS8981: lowercase type names (e.g., 'console' matches JS) - required for JS semantics -->
+    <NoWarn>$(NoWarn);CS8981</NoWarn>
   </PropertyGroup>
 
 </Project>
