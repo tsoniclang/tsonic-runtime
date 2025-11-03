@@ -1,0 +1,39 @@
+{
+  "bindings": {
+    "console": {
+      "kind": "global",
+      "assembly": "Tsonic.Runtime",
+      "type": "Tsonic.Runtime.console"
+    },
+    "Math": {
+      "kind": "global",
+      "assembly": "Tsonic.Runtime",
+      "type": "Tsonic.Runtime.Math"
+    },
+    "JSON": {
+      "kind": "global",
+      "assembly": "Tsonic.Runtime",
+      "type": "Tsonic.Runtime.JSON"
+    },
+    "parseInt": {
+      "kind": "global",
+      "assembly": "Tsonic.Runtime",
+      "type": "Tsonic.Runtime.Globals.parseInt"
+    },
+    "parseFloat": {
+      "kind": "global",
+      "assembly": "Tsonic.Runtime",
+      "type": "Tsonic.Runtime.Globals.parseFloat"
+    },
+    "isNaN": {
+      "kind": "global",
+      "assembly": "Tsonic.Runtime",
+      "type": "Tsonic.Runtime.Globals.isNaN"
+    },
+    "isFinite": {
+      "kind": "global",
+      "assembly": "Tsonic.Runtime",
+      "type": "Tsonic.Runtime.Globals.isFinite"
+    }
+  }
+}
