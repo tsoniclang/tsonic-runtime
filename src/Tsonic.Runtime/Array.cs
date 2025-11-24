@@ -423,9 +423,9 @@ namespace Tsonic.Runtime
         // ==================== Sorting Methods ====================
 
         /// <summary>
-        /// Sort array in place
+        /// Sort array in place and return the array (matches JavaScript behavior)
         /// </summary>
-        public static void sort<T>(List<T> arr, Func<T, T, double>? compareFunc = null)
+        public static List<T> sort<T>(List<T> arr, Func<T, T, double>? compareFunc = null)
         {
             if (compareFunc != null)
             {
@@ -444,14 +444,16 @@ namespace Tsonic.Runtime
                     return string.Compare(aStr, bStr, StringComparison.Ordinal);
                 });
             }
+            return arr;
         }
 
         /// <summary>
-        /// Reverse array in place
+        /// Reverse array in place and return the array (matches JavaScript behavior)
         /// </summary>
-        public static void reverse<T>(List<T> arr)
+        public static List<T> reverse<T>(List<T> arr)
         {
             arr.Reverse();
+            return arr;
         }
 
         // ==================== Conversion Methods ====================
