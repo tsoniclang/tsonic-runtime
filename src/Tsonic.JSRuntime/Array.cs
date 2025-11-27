@@ -182,7 +182,33 @@ namespace Tsonic.JSRuntime
         // ==================== Higher-Order Functions ====================
 
         /// <summary>
-        /// Map array elements to new array
+        /// Map array elements to new array (value only)
+        /// </summary>
+        public static List<TResult> map<T, TResult>(this List<T> arr, Func<T, TResult> callback)
+        {
+            var result = new List<TResult>(arr.Count);
+            for (int i = 0; i < arr.Count; i++)
+            {
+                result.Add(callback(arr[i]));
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Map array elements to new array (value, index)
+        /// </summary>
+        public static List<TResult> map<T, TResult>(this List<T> arr, Func<T, int, TResult> callback)
+        {
+            var result = new List<TResult>(arr.Count);
+            for (int i = 0; i < arr.Count; i++)
+            {
+                result.Add(callback(arr[i], i));
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Map array elements to new array (value, index, array)
         /// </summary>
         public static List<TResult> map<T, TResult>(this List<T> arr, Func<T, int, List<T>, TResult> callback)
         {
@@ -195,7 +221,39 @@ namespace Tsonic.JSRuntime
         }
 
         /// <summary>
-        /// Filter array elements
+        /// Filter array elements (value only)
+        /// </summary>
+        public static List<T> filter<T>(this List<T> arr, Func<T, bool> callback)
+        {
+            var result = new List<T>();
+            for (int i = 0; i < arr.Count; i++)
+            {
+                if (callback(arr[i]))
+                {
+                    result.Add(arr[i]);
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Filter array elements (value, index)
+        /// </summary>
+        public static List<T> filter<T>(this List<T> arr, Func<T, int, bool> callback)
+        {
+            var result = new List<T>();
+            for (int i = 0; i < arr.Count; i++)
+            {
+                if (callback(arr[i], i))
+                {
+                    result.Add(arr[i]);
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Filter array elements (value, index, array)
         /// </summary>
         public static List<T> filter<T>(this List<T> arr, Func<T, int, List<T>, bool> callback)
         {
@@ -211,7 +269,33 @@ namespace Tsonic.JSRuntime
         }
 
         /// <summary>
-        /// Reduce array to single value (with initial value)
+        /// Reduce array to single value (accumulator, value)
+        /// </summary>
+        public static TResult reduce<T, TResult>(this List<T> arr, Func<TResult, T, TResult> callback, TResult initialValue)
+        {
+            TResult accumulator = initialValue;
+            for (int i = 0; i < arr.Count; i++)
+            {
+                accumulator = callback(accumulator, arr[i]);
+            }
+            return accumulator;
+        }
+
+        /// <summary>
+        /// Reduce array to single value (accumulator, value, index)
+        /// </summary>
+        public static TResult reduce<T, TResult>(this List<T> arr, Func<TResult, T, int, TResult> callback, TResult initialValue)
+        {
+            TResult accumulator = initialValue;
+            for (int i = 0; i < arr.Count; i++)
+            {
+                accumulator = callback(accumulator, arr[i], i);
+            }
+            return accumulator;
+        }
+
+        /// <summary>
+        /// Reduce array to single value (accumulator, value, index, array)
         /// </summary>
         public static TResult reduce<T, TResult>(this List<T> arr, Func<TResult, T, int, List<T>, TResult> callback, TResult initialValue)
         {
@@ -224,7 +308,43 @@ namespace Tsonic.JSRuntime
         }
 
         /// <summary>
-        /// Reduce array to single value (no initial value)
+        /// Reduce array to single value (no initial value, accumulator, value)
+        /// </summary>
+        public static T reduce<T>(this List<T> arr, Func<T, T, T> callback)
+        {
+            if (arr.Count == 0)
+            {
+                throw new InvalidOperationException("Reduce of empty array with no initial value");
+            }
+
+            T accumulator = arr[0];
+            for (int i = 1; i < arr.Count; i++)
+            {
+                accumulator = callback(accumulator, arr[i]);
+            }
+            return accumulator;
+        }
+
+        /// <summary>
+        /// Reduce array to single value (no initial value, accumulator, value, index)
+        /// </summary>
+        public static T reduce<T>(this List<T> arr, Func<T, T, int, T> callback)
+        {
+            if (arr.Count == 0)
+            {
+                throw new InvalidOperationException("Reduce of empty array with no initial value");
+            }
+
+            T accumulator = arr[0];
+            for (int i = 1; i < arr.Count; i++)
+            {
+                accumulator = callback(accumulator, arr[i], i);
+            }
+            return accumulator;
+        }
+
+        /// <summary>
+        /// Reduce array to single value (no initial value, accumulator, value, index, array)
         /// </summary>
         public static T reduce<T>(this List<T> arr, Func<T, T, int, List<T>, T> callback)
         {
@@ -242,7 +362,33 @@ namespace Tsonic.JSRuntime
         }
 
         /// <summary>
-        /// Reduce array from right to left (with initial value)
+        /// Reduce array from right to left (accumulator, value)
+        /// </summary>
+        public static TResult reduceRight<T, TResult>(this List<T> arr, Func<TResult, T, TResult> callback, TResult initialValue)
+        {
+            TResult accumulator = initialValue;
+            for (int i = arr.Count - 1; i >= 0; i--)
+            {
+                accumulator = callback(accumulator, arr[i]);
+            }
+            return accumulator;
+        }
+
+        /// <summary>
+        /// Reduce array from right to left (accumulator, value, index)
+        /// </summary>
+        public static TResult reduceRight<T, TResult>(this List<T> arr, Func<TResult, T, int, TResult> callback, TResult initialValue)
+        {
+            TResult accumulator = initialValue;
+            for (int i = arr.Count - 1; i >= 0; i--)
+            {
+                accumulator = callback(accumulator, arr[i], i);
+            }
+            return accumulator;
+        }
+
+        /// <summary>
+        /// Reduce array from right to left (accumulator, value, index, array)
         /// </summary>
         public static TResult reduceRight<T, TResult>(this List<T> arr, Func<TResult, T, int, List<T>, TResult> callback, TResult initialValue)
         {
@@ -255,7 +401,43 @@ namespace Tsonic.JSRuntime
         }
 
         /// <summary>
-        /// Reduce array from right to left (no initial value)
+        /// Reduce array from right to left (no initial value, accumulator, value)
+        /// </summary>
+        public static T reduceRight<T>(this List<T> arr, Func<T, T, T> callback)
+        {
+            if (arr.Count == 0)
+            {
+                throw new InvalidOperationException("Reduce of empty array with no initial value");
+            }
+
+            T accumulator = arr[arr.Count - 1];
+            for (int i = arr.Count - 2; i >= 0; i--)
+            {
+                accumulator = callback(accumulator, arr[i]);
+            }
+            return accumulator;
+        }
+
+        /// <summary>
+        /// Reduce array from right to left (no initial value, accumulator, value, index)
+        /// </summary>
+        public static T reduceRight<T>(this List<T> arr, Func<T, T, int, T> callback)
+        {
+            if (arr.Count == 0)
+            {
+                throw new InvalidOperationException("Reduce of empty array with no initial value");
+            }
+
+            T accumulator = arr[arr.Count - 1];
+            for (int i = arr.Count - 2; i >= 0; i--)
+            {
+                accumulator = callback(accumulator, arr[i], i);
+            }
+            return accumulator;
+        }
+
+        /// <summary>
+        /// Reduce array from right to left (no initial value, accumulator, value, index, array)
         /// </summary>
         public static T reduceRight<T>(this List<T> arr, Func<T, T, int, List<T>, T> callback)
         {
@@ -273,7 +455,29 @@ namespace Tsonic.JSRuntime
         }
 
         /// <summary>
-        /// Execute callback for each element
+        /// Execute callback for each element (value only)
+        /// </summary>
+        public static void forEach<T>(this List<T> arr, Action<T> callback)
+        {
+            for (int i = 0; i < arr.Count; i++)
+            {
+                callback(arr[i]);
+            }
+        }
+
+        /// <summary>
+        /// Execute callback for each element (value, index)
+        /// </summary>
+        public static void forEach<T>(this List<T> arr, Action<T, int> callback)
+        {
+            for (int i = 0; i < arr.Count; i++)
+            {
+                callback(arr[i], i);
+            }
+        }
+
+        /// <summary>
+        /// Execute callback for each element (value, index, array)
         /// </summary>
         public static void forEach<T>(this List<T> arr, Action<T, int, List<T>> callback)
         {
