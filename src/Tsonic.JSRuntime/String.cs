@@ -173,6 +173,17 @@ namespace Tsonic.JSRuntime
         /// </summary>
         public static List<string> split(this string str, string separator, int? limit = null)
         {
+            // Handle empty separator - split into individual characters (JS behavior)
+            if (separator == "")
+            {
+                var chars = str.ToCharArray().Select(c => c.ToString()).ToList();
+                if (limit.HasValue && chars.Count > limit.Value)
+                {
+                    return chars.Take(limit.Value).ToList();
+                }
+                return chars;
+            }
+
             string[] parts = str.Split(new[] { separator }, StringSplitOptions.None);
 
             if (limit.HasValue && parts.Length > limit.Value)
