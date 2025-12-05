@@ -119,7 +119,28 @@ mkdir -p .analysis
 - No loss of progress or decisions
 - Gitignored for persistence
 
-**Note:** All three directories (`.tests/`, `.analysis/`, `.todos/`) should be added to `.gitignore`
+#### .temp/ Directory (Temporary Scripts & Debugging)
+
+**Purpose:** Store temporary scripts and one-off debugging files
+
+**Usage:**
+```bash
+# Create directory (gitignored)
+mkdir -p .temp
+
+# Use for:
+# - Quick test scripts
+# - Debug output files
+# - One-off data transformations
+# - Temporary C#/JavaScript for testing
+
+# NEVER use /tmp or system temp directories
+# .temp keeps files visible and within the project
+```
+
+**Key Rule:** ALWAYS use `.temp/` instead of `/tmp/` or system temp directories. This keeps temporary work visible and accessible within the project.
+
+**Note:** All four directories (`.tests/`, `.analysis/`, `.todos/`, `.temp/`) should be added to `.gitignore`
 
 ## Session Startup
 
@@ -227,7 +248,7 @@ tests/Tsonic.JSRuntime.Tests/      # xUnit tests
 1. **Use xUnit**: Standard .NET testing framework
 2. **Verify JavaScript behavior**: Test against actual JavaScript output
 3. **Test edge cases**: null, undefined behavior, empty arrays, NaN, Infinity
-4. **300+ tests**: Comprehensive coverage of all runtime behaviors
+4. **500+ tests**: Comprehensive coverage of all runtime behaviors
 5. **Cross-platform**: Ensure tests pass on Windows, Linux, macOS
 
 ## Common Tasks
@@ -303,16 +324,18 @@ dotnet pack -c Release                  # Create NuGet package
 - **Operators**: Type coercion and comparison operators
 - **Structural**: Structural typing support
 - **Globals**: parseInt, parseFloat, isNaN, isFinite
+- **Map/Set**: ES6 Map and Set collections
+- **WeakMap/WeakSet**: Weak reference collections
+- **ArrayBuffer**: Fixed-length binary data buffer
+- **Typed Arrays**: Int8Array, Uint8Array, Uint8ClampedArray, Int16Array, Uint16Array, Int32Array, Uint32Array, Float32Array, Float64Array
+- **Date**: Date object with timezone support
+- **RegExp**: Regular expression support with JavaScript flags (g, i, m, s, u, y)
 
 ### Not Implemented ⏳
-- **Date**: Date object and date manipulation
-- **RegExp**: Regular expression support
 - **Promise**: Async/await runtime support
 - **Proxy**: Meta-programming features
 - **Symbol**: Symbol primitive type
-- **WeakMap/WeakSet**: Weak references
-- **Typed Arrays**: Int8Array, Uint8Array, etc.
-- **ArrayBuffer**: Binary data support
+- **Error types**: Specific error types (TypeError, RangeError, etc.)
 
 ## Known Issues / Limitations
 
@@ -320,7 +343,6 @@ dotnet pack -c Release                  # Create NuGet package
 2. **String encoding**: C# strings are UTF-16, matching JavaScript
 3. **Number precision**: Uses C# double (64-bit IEEE 754), matching JavaScript
 4. **No async support yet**: Promise/async/await not implemented
-5. **No regex yet**: RegExp not implemented
 
 ## Best Practices
 
@@ -360,11 +382,8 @@ dotnet pack -c Release                  # Create NuGet package
 
 Priority order if expanding:
 
-1. **Date**: Implement Date object with timezone support
-2. **RegExp**: Regular expression support with full ECMAScript regex syntax
-3. **Promise**: Basic promise implementation for async/await
-4. **Typed Arrays**: ArrayBuffer and typed array views
-5. **Symbol**: Symbol primitive type
-6. **Proxy/Reflect**: Meta-programming features
-7. **WeakMap/WeakSet**: Weak reference collections
-8. **Error types**: Specific error types (TypeError, RangeError, etc.)
+1. **Promise**: Basic promise implementation for async/await
+2. **Symbol**: Symbol primitive type
+3. **Proxy/Reflect**: Meta-programming features
+4. **Error types**: Specific error types (TypeError, RangeError, etc.)
+5. **Intl**: Internationalization APIs

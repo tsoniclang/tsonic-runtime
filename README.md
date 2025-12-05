@@ -12,7 +12,14 @@ Tsonic.JSRuntime is a C# library that implements JavaScript semantics, enabling 
 - **Structural typing** - Duck typing and object shape compatibility
 - **Console API** - `console.log`, `console.error`, etc.
 - **JSON support** - `JSON.stringify`, `JSON.parse`
+- **Math** - JavaScript Math object (abs, floor, ceil, round, random, etc.)
 - **Global functions** - `parseInt`, `parseFloat`, `encodeURIComponent`, etc.
+- **Map/Set** - ES6 Map and Set collections
+- **WeakMap/WeakSet** - Weak reference collections
+- **ArrayBuffer** - Fixed-length binary data buffer
+- **Typed Arrays** - Int8Array, Uint8Array, Uint8ClampedArray, Int16Array, Uint16Array, Int32Array, Uint32Array, Float32Array, Float64Array
+- **Date** - Date object with timezone support
+- **RegExp** - Regular expression support with JavaScript flags
 
 ## Building
 
@@ -26,7 +33,7 @@ dotnet build
 dotnet test
 ```
 
-All 300+ tests verify that the runtime matches JavaScript behavior exactly.
+All 500+ tests verify that the runtime matches JavaScript behavior exactly.
 
 ## NativeAOT Compatibility
 

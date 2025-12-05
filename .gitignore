@@ -63,3 +63,4 @@ nunit-*.xml
 .tests/
 .analysis/
 .todos/
+.temp/
